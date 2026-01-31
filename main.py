@@ -1,6 +1,8 @@
 import whisper
 import datetime
-import re
+import argparse
+import os
+from pathlib import Path
 
 def format_timestamp(seconds: float):
     td = datetime.timedelta(seconds=seconds)
@@ -11,40 +13,57 @@ def format_timestamp(seconds: float):
     millis = int(td.microseconds / 1000)
     return f"{hours:02d}:{minutes:02d}:{secs:02d},{millis:03d}"
 
-def main():
-    model = whisper.load_model("turbo")
-    audio_path = "your-audio-or-video-path"
-    
-    result = model.transcribe(audio_path, word_timestamps=True)
+def process_subtitles(input_path, model_type, output_dir):
+    # 1. Path Management
+    video_path = Path(input_path)
+    if not video_path.exists():
+        print(f"Error: File {input_path} not found.")
+        return
 
-    with open("clean_one_word_subs.srt", "w", encoding="utf-8") as f:
+    # If no output dir is specified, save next to the video
+    if output_dir:
+        save_dir = Path(output_dir)
+    else:
+        save_dir = video_path.parent
+    
+    save_dir.mkdir(parents=True, exist_ok=True)
+    output_filename = save_dir / f"{video_path.stem}_subs.srt"
+
+    # 2. AI Processing
+    print(f"Loading Whisper model: {model_type}...")
+    model = whisper.load_model(model_type)
+    
+    print(f"Transcribing: {video_path.name}")
+    result = model.transcribe(str(video_path), word_timestamps=True)
+
+    # 3. Writing SRT
+    with open(output_filename, "w", encoding="utf-8") as f:
         counter = 1
         for segment in result["segments"]:
             for word_data in segment["words"]:
-                # 1. Get the raw word
-                word = word_data["word"].strip()
+                word = word_data["word"].strip().replace(",", "")
                 
-                # 2. STRIP COMMAS (and other punctuation if you like)
-                word = word.replace(",", "")
-                
-                # Optional: Uncomment the next line to also strip periods and question marks
-                # word = re.sub(r'[.,?!]', '', word)
-
-                # Skip empty strings (in case a segment was just a comma)
                 if not word:
                     continue
 
                 start = word_data["start"]
                 end = word_data["end"]
 
-                # Write the SRT block
                 f.write(f"{counter}\n")
                 f.write(f"{format_timestamp(start)} --> {format_timestamp(end)}\n")
                 f.write(f"{word}\n\n")
-                
                 counter += 1
 
-    print("Comma-free 1-word-per-line SRT generated!")
+    print(f"✅ Success! Subtitles saved to: {output_filename}")
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Generate minimalist one-word SRT subtitles.")
+    
+    # Industry standard flags
+    parser.add_argument("-i", "--input", required=True, help="Path to the input video/audio file")
+    parser.add_argument("-m", "--model", default="turbo", help="Whisper model to use (tiny, base, small, medium, large, turbo)")
+    parser.add_argument("-o", "--output", help="Directory to save the SRT file (defaults to video location)")
+
+    args = parser.parse_args()
+
+    process_subtitles(args.input, args.model, args.output)

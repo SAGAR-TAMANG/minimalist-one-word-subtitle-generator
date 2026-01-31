@@ -1,87 +1,81 @@
-# One Word Reel Subtitle Generator
+# 🎬 One-Word Reel Subtitle Generator
 
-**Create one-word reel subtitles (SRT files) that are directly importable in VN or CapCut.**
+**Generate high-energy, "Hormozi-style" one-word subtitles in seconds.**
 
-This tool uses OpenAI's Whisper model to transcribe video/audio and generates a "one-word-per-line" SRT file. It’s designed specifically for the high-energy, fast-paced subtitle style used in Instagram Reels, TikToks, and YouTube Shorts.
+This CLI tool leverages OpenAI's Whisper (Turbo) to transcribe videos and generate `.srt` files with strict word-level timing. Perfect for creators who want that "popping" text effect in CapCut or VN without the manual grind.
 
-## 🚀 Features
+## ✨ What’s New (v2.0)
 
-* **One Word Per Segment:** Strict word-level timestamps so text pops exactly as spoken.
-* **Clean Visuals:** Automatically strips commas and punctuation for a cleaner "Reel" aesthetic.
-* **Optimized Performance:** Uses the Whisper `turbo` model for a perfect balance of speed and accuracy.
-* **Editor Ready:** Generated `.srt` files are fully compatible with **VN Video Editor** and **CapCut**.
+* **CLI Powered:** No more hardcoding paths. Use `-i` and `-o` flags like a pro.
+* **Smart Pathing:** Automatically saves SRTs in your Downloads or the source folder.
+* **Model Selection:** Switch between `tiny` for speed or `large` for complex tech jargon.
 
-## 🛠️ Prerequisites
+## 🛠️ Installation
 
-Before running the script, ensure you have **FFmpeg** installed on your system.
+1. **Prerequisites:** Ensure you have [FFmpeg](https://ffmpeg.org/) installed.
+2. **Clone & Install:**
 
-```bash
-# macOS
-brew install ffmpeg
-
-# Ubuntu/Linux
-sudo apt update && sudo apt install ffmpeg
-
-# Windows
-choco install ffmpeg
-
-```
-
-## 📦 Installation
-
-1. **Clone the repository:**
 ```bash
 git clone https://github.com/SAGAR-TAMANG/one-word-reel-subtitle-generator.git
 cd one-word-reel-subtitle-generator
-
-```
-
-
-2. **Install dependencies:**
-```bash
 pip install -U openai-whisper
 
 ```
 
+## 🚀 Usage
 
+Run the tool directly from your terminal. By default, it uses the `turbo` model for speed.
 
-## 💻 Usage
+### Basic Command
 
-1. Open `main.py` and point the `audio_path` to your video file.
-2. Run the generator:
+Saves the `.srt` in the same folder as your video.
+
 ```bash
-python main.py
+python main.py -i "path/to/your/reel.mp4"
 
 ```
 
+### Advanced Options
 
-3. A file named `clean_one_word_subs.srt` will be generated in your folder.
+```bash
+# Save to a specific directory (e.g., Downloads)
+python main.py -i "video.mp4" -o "~/Downloads"
 
-## 📱 Importing to Editors
+# Use the Large model for maximum accuracy on tech terms
+python main.py -i "video.mp4" -m large
 
-### For VN Video Editor:
+```
 
-1. Open your project in VN.
-2. Tap the **Music/Text track** > **Text** > **SRT**.
-3. Select the generated file.
-4. Apply a global animation (like "Pop") to all segments at once for the best effect.
+| Flag | Full Name | Description |
+| --- | --- | --- |
+| `-i` | `--input` | **Required.** Path to your video/audio file. |
+| `-o` | `--output` | Directory to save the SRT (Defaults to input location). |
+| `-m` | `--model` | Whisper model: `tiny`, `base`, `small`, `medium`, `large`, `turbo`. |
 
-### For CapCut:
+---
 
-1. Go to **Text** > **Local Captions**.
-2. Upload the `.srt` file.
-3. Use the "Batch Edit" feature to style all words simultaneously.
+## 📱 Mobile Workflow (VN & CapCut)
+
+1. **Generate:** Run the script on your laptop (or via **Termux** on Android).
+2. **Import:** AirDrop/WhatsApp the `.srt` to your phone.
+3. **VN Editor:** `Text` -> `SRT` -> `Import`.
+4. **CapCut:** `Text` -> `Local Captions` -> `Upload`.
+5. **Pro Tip:** Apply a "Pop" or "Spring" animation to the entire text track for that high-retention aesthetic.
+
+---
+
+## 🤖 For the Builders (Termux Users)
+
+Since this tool is lightweight, you can run it locally on your Android device using Termux. Perfect for editing on the go in Bangalore traffic!
+
+1. Install Python and FFmpeg in Termux.
+2. Run the script.
+3. Move the SRT to your `/sdcard/` and import directly into CapCut mobile.
 
 ---
 
 ## 🤝 Contributing
 
-Feel free to open issues or submit pull requests. If you're into AI automation or local-first AI, let's connect!
+I'm building this to automate my own content workflow at **sagar_builds**. If you have ideas for auto-capitalization or color-tagging keywords, open a PR!
 
-**Built by [Sagar Tamang](https://github.com/SAGAR-TAMANG)**
-
----
-
-### Next Step
-
-Since you're scaling your "sagar_builds" brand, would you like me to add a **License** file (MIT) to the repo as well?
+**Built by [Sagar Tamang**](https://github.com/SAGAR-TAMANG)
