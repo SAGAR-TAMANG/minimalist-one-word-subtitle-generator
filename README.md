@@ -1,7 +1,10 @@
 # 🎬 One-Word Reel Subtitle Generator
 
-**Generate high-energy, "Hormozi-style" one-word subtitles in seconds.**
+**Generate high-energy, "Hormozi-style" or "sagar_builds-style" one-word subtitles in seconds.**
 
+[![Watch the Full Walkthrough on YouTube](assets/youtube-thumbnail.jpeg)](https://www.youtube.com/watch?v=4mdRA1sbYd4)
+<center><strong>Watch the Full Walkthrough on YouTube</strong></center>
+<br>
 This CLI tool leverages OpenAI's Whisper (Turbo) to transcribe videos and generate `.srt` files with strict word-level timing. Perfect for creators who want that "popping" text effect in CapCut or VN without the manual grind.
 
 ## ✨ What’s New (v2.0)
